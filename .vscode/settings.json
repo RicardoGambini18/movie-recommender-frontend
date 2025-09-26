@@ -1,0 +1,9 @@
+{
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "prettier.configPath": "prettier.config.js",
+  "eslint.useFlatConfig": true,
+  "css.lint.unknownAtRules": "ignore",
+  "eslint.format.enable": true
+}
