@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, Eye, EyeOff, Lock, User as UserIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import { Combobox } from '~/components/combobox'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
@@ -23,6 +23,7 @@ export const LoginForm = () => {
 
   const {
     control,
+    setError,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
@@ -35,8 +36,18 @@ export const LoginForm = () => {
     },
   })
 
-  const { data: users = [], isLoading: usersLoading } =
-    api.auth.getUsers.useQuery()
+  const {
+    data: users = [],
+    error: usersError,
+    isLoading: isUsersLoading,
+  } = api.auth.getUsers.useQuery()
+
+  useEffect(() => {
+    if (usersError && !isUsersLoading) {
+      console.error(usersError)
+      setError('userId', { message: 'Error al cargar los usuarios' })
+    }
+  }, [usersError, isUsersLoading, setError])
 
   return (
     <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 shadow-2xl">
@@ -63,14 +74,14 @@ export const LoginForm = () => {
                 id="user-combobox"
                 className="w-full"
                 onChange={onChange}
-                disabled={usersLoading}
                 estimatedOptionSize={52}
                 getValue={(user) => user.id}
                 getLabel={(user) => user.name}
                 searchPlaceholder="Buscar usuario..."
                 emptyText="No se encontró el usuario."
+                disabled={isUsersLoading || !!usersError}
                 placeholder={
-                  usersLoading
+                  isUsersLoading
                     ? 'Cargando usuarios...'
                     : 'Selecciona un usuario...'
                 }
