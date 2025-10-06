@@ -2,8 +2,11 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, Eye, EyeOff, Lock, User as UserIcon } from 'lucide-react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Combobox } from '~/components/combobox'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
@@ -13,12 +16,8 @@ import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { type LoginInput, loginSchema } from '~/validations/auth'
 
-const onSubmit: SubmitHandler<LoginInput> = async (data) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  console.info(data)
-}
-
 export const LoginForm = () => {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
 
   const {
@@ -41,6 +40,25 @@ export const LoginForm = () => {
     error: usersError,
     isLoading: isUsersLoading,
   } = api.auth.getUsers.useQuery()
+
+  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        userId: data.userId,
+        password: data.password,
+      })
+
+      if (result?.error || !result?.ok) {
+        setError('password', { message: 'Contraseña incorrecta' })
+      } else {
+        router.push('/dashboard')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      toast.error('Error al iniciar sesión')
+    }
+  }
 
   useEffect(() => {
     if (usersError && !isUsersLoading) {

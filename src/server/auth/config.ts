@@ -1,4 +1,8 @@
 import { type DefaultSession, type NextAuthConfig } from 'next-auth'
+import Credentials from 'next-auth/providers/credentials'
+import { env } from '~/env'
+import { apiClient } from '~/lib/api-client'
+import { type User } from '~/types/user'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -10,15 +14,8 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string
-      // ...other properties
-      // role: UserRole;
     } & DefaultSession['user']
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -28,15 +25,39 @@ declare module 'next-auth' {
  */
 export const authConfig = {
   providers: [
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    Credentials({
+      name: 'credentials',
+      credentials: {
+        userId: { type: 'number' },
+        password: { type: 'password' },
+      },
+      async authorize(credentials) {
+        if (!credentials?.userId || !credentials?.password) {
+          return null
+        }
+
+        if (credentials.password !== env.AUTH_PASSWORD) {
+          return null
+        }
+
+        try {
+          const userId = Number(credentials.userId)
+          const { data: userData } = await apiClient.get<User>(
+            `/users/${userId}`
+          )
+
+          return {
+            id: userData.id.toString(),
+            name: userData.name,
+            email: userData.email,
+            image: userData.image,
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+          return null
+        }
+      },
+    }),
   ],
   callbacks: {
     session: ({ session, token }) => ({
