@@ -4,7 +4,7 @@ import { type User } from '~/types/user'
 
 export const authRouter = createTRPCRouter({
   getUsers: publicProcedure.query(async () => {
-    const { data } = await apiClient<User[]>('/users')
+    const { data } = await apiClient.get<User[]>('/users')
     return data
   }),
 })

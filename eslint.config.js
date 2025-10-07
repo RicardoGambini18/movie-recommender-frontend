@@ -37,6 +37,7 @@ export default config(
       'sonarjs/no-nested-functions': 'off',
       'sonarjs/cognitive-complexity': 'off',
       // Unicorn
+      'unicorn/no-array-sort': 'off',
       'unicorn/no-array-reduce': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/filename-case': ['error', { case: 'kebabCase' }],
