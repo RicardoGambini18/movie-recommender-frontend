@@ -1,5 +1,6 @@
 import { type Metadata } from 'next'
 import { Roboto } from 'next/font/google'
+import { AppStoreLoader } from '~/components/app-store-loader'
 import { Toaster } from '~/components/ui/sonner'
 import '~/styles/globals.css'
 import { TRPCReactProvider } from '~/trpc/react'
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="es" className={roboto.variable}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <AppStoreLoader>{children}</AppStoreLoader>
+        </TRPCReactProvider>
         <Toaster />
       </body>
     </html>

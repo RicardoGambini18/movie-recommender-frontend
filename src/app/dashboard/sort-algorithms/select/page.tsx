@@ -16,14 +16,12 @@ export default function SortAlgorithmsSelect() {
   const router = useRouter()
 
   const {
-    sortAlgorithms: {
-      isAllSelected,
-      toggleSelectAll,
-      toggleAlgorithm,
-      getSelectedCount,
-      isAlgorithmSelected,
-    },
-  } = useAppStore()
+    isAllSelected,
+    toggleSelectAll,
+    toggleAlgorithm,
+    getSelectedCount,
+    isAlgorithmSelected,
+  } = useAppStore((state) => state.sortAlgorithms)
 
   const {
     error,

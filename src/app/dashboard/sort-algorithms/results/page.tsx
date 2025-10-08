@@ -15,9 +15,9 @@ export default function SortAlgorithmsResults() {
   const router = useRouter()
   const [selectedMetric, setSelectedMetric] = useState<Metric>(Metric.TIME)
 
-  const {
-    sortAlgorithms: { selectedAlgorithms },
-  } = useAppStore()
+  const selectedAlgorithms = useAppStore(
+    (state) => state.sortAlgorithms.selectedAlgorithms
+  )
 
   const {
     error,
