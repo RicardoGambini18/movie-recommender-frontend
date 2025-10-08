@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
+import { env } from '~/env'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import { type LoginInput, loginSchema } from '~/validations/auth'
@@ -211,7 +212,7 @@ export const LoginForm = () => {
       </form>
       <div className="mt-6 text-center">
         <p className="text-slate-400 text-sm">
-          Proyecto final del curso Algoritmos y Estructuras de Datos
+          Proyecto final del curso {env.NEXT_PUBLIC_COURSE}
         </p>
       </div>
     </div>

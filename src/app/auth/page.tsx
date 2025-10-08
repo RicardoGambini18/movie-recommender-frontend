@@ -14,10 +14,10 @@ export default function Home() {
             <span className="text-black font-bold text-xl">IMDb</span>
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">
-            Bienvenido de Vuelta
+            Recomendador de Películas
           </h1>
           <p className="text-slate-400">
-            Inicia sesión en tu base de datos de películas
+            Bienvenido de vuelta, inicia sesión para continuar
           </p>
         </div>
         <LoginForm />

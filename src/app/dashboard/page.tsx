@@ -1,11 +1,12 @@
 import { BarChart3, Search } from 'lucide-react'
 import { HeaderLayout } from '~/components/header-layout'
+import { LogoutButton } from '~/components/logout-button'
 
 import { ModuleCard } from './components/module-card'
 
 export default function Dashboard() {
   return (
-    <HeaderLayout>
+    <HeaderLayout rightElement={<LogoutButton />}>
       <div className="mb-8">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
           Bienvenido
