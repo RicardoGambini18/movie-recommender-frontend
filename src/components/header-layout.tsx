@@ -16,7 +16,7 @@ export function HeaderLayout({
   children,
   subtitle,
   rightElement,
-  title = 'Dashboard',
+  title = 'Recomendador de Películas',
 }: Readonly<HeaderLayoutProps>) {
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
@@ -25,29 +25,35 @@ export function HeaderLayout({
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
       </div>
       <header className="border-b border-slate-700/50 glass-light bg-slate-900/30 flex-shrink-0 relative z-20">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between max-w-[960px]">
-          <div className="flex items-center gap-3">
+        <div className="container mx-auto px-4 py-4 gap-3 h-[76px] flex items-center justify-between max-w-[960px]">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             {backUrl && (
               <Link href={backUrl}>
                 <Button
-                  variant="ghost"
                   size="icon"
-                  className="text-slate-400 hover:text-black hover:bg-white"
+                  variant="ghost"
+                  className="text-slate-400 hover:text-white hover:bg-slate-800 flex-shrink-0"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               </Link>
             )}
-            <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-lg">
+            <div className="hidden md:flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-lg flex-shrink-0">
               <span className="text-black font-bold text-sm">IMDb</span>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-white">{title}</h1>
-              {subtitle && <p className="text-xs text-slate-400">{subtitle}</p>}
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg md:text-xl font-bold text-white truncate">
+                {title}
+              </h1>
+              {subtitle && (
+                <p className="text-xs text-slate-400 truncate">{subtitle}</p>
+              )}
             </div>
           </div>
           {rightElement && (
-            <div className="flex items-center gap-3">{rightElement}</div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              {rightElement}
+            </div>
           )}
         </div>
       </header>

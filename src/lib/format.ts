@@ -1,3 +1,8 @@
+import dayjs from 'dayjs'
+import 'dayjs/locale/es'
+
+dayjs.locale('es')
+
 export const formatNumber = (num: number, showDecimals = false) => {
   if (showDecimals) {
     return new Intl.NumberFormat('es-ES', {
@@ -7,6 +12,10 @@ export const formatNumber = (num: number, showDecimals = false) => {
   }
 
   return new Intl.NumberFormat('es-ES').format(num)
+}
+
+export const formatDate = (dateString: string) => {
+  return dayjs(dateString).format('D [de] MMMM [de] YYYY')
 }
 
 export const formatTime = (nanoseconds: number) => {

@@ -15,18 +15,19 @@ export default function SortAlgorithmsResults() {
   const router = useRouter()
   const [selectedMetric, setSelectedMetric] = useState<Metric>(Metric.TIME)
 
-  const selectedAlgorithms = useAppStore(
-    (state) => state.sortAlgorithms.selectedAlgorithms
-  )
+  const { selectedAlgorithms, selectedMovieIds } = useAppStore((state) => ({
+    selectedMovieIds: state.searchAlgorithms.selectedMovieIds,
+    selectedAlgorithms: state.searchAlgorithms.selectedAlgorithms,
+  }))
 
   const {
     error,
     refetch,
     isLoading,
     data: results,
-  } = api.movies.getSortResults.useQuery(
-    { algorithms: selectedAlgorithms },
-    { enabled: selectedAlgorithms.length > 0 }
+  } = api.movies.getSearchResults.useQuery(
+    { algorithms: selectedAlgorithms, movieIds: selectedMovieIds },
+    { enabled: selectedAlgorithms.length > 0 && selectedMovieIds.length > 0 }
   )
 
   const sortedResults = useMemo(() => {
@@ -38,17 +39,17 @@ export default function SortAlgorithmsResults() {
   }, [results, selectedMetric])
 
   useEffect(() => {
-    if (selectedAlgorithms.length === 0) {
-      router.push('/dashboard/sort-algorithms/select')
+    if (selectedAlgorithms.length === 0 || selectedMovieIds.length === 0) {
+      router.push('/dashboard/search-algorithms/select-algorithms')
     }
-  }, [selectedAlgorithms, router])
+  }, [selectedAlgorithms, selectedMovieIds, router])
 
   if (isLoading) {
     return (
       <HeaderLayout
-        title="Algoritmos de Ordenamiento"
-        backUrl="/dashboard/sort-algorithms/select"
-        subtitle="Paso 2: Comparación de resultados"
+        title="Algoritmos de Búsqueda"
+        subtitle="Paso 3: Comparación de resultados"
+        backUrl="/dashboard/search-algorithms/select-algorithms"
       >
         <LoadingState
           title="Procesando algoritmos"
@@ -61,9 +62,9 @@ export default function SortAlgorithmsResults() {
   if (error) {
     return (
       <HeaderLayout
-        title="Algoritmos de Ordenamiento"
-        backUrl="/dashboard/sort-algorithms/select"
-        subtitle="Paso 2: Comparación de resultados"
+        title="Algoritmos de Búsqueda"
+        subtitle="Paso 3: Comparación de resultados"
+        backUrl="/dashboard/search-algorithms/select-algorithms"
       >
         <ErrorState
           onRetry={() => refetch()}
@@ -76,9 +77,9 @@ export default function SortAlgorithmsResults() {
 
   return (
     <HeaderLayout
-      title="Algoritmos de Ordenamiento"
-      backUrl="/dashboard/sort-algorithms/select"
-      subtitle="Paso 2: Comparación de resultados"
+      title="Algoritmos de Búsqueda"
+      subtitle="Paso 3: Comparación de resultados"
+      backUrl="/dashboard/search-algorithms/select-algorithms"
     >
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0 flex-1">
@@ -92,17 +93,17 @@ export default function SortAlgorithmsResults() {
         <div className="flex items-center gap-3 flex-shrink-0">
           <MetricSelect
             value={selectedMetric}
-            onValueChange={setSelectedMetric}
             className="w-full md:w-auto"
+            onValueChange={setSelectedMetric}
           />
         </div>
       </div>
       <div className="space-y-4">
         {sortedResults.map((result, index) => (
           <ResultCard
-            key={result.algorithm}
-            result={result}
             index={index}
+            result={result}
+            key={result.algorithm}
             selectedMetric={selectedMetric}
           />
         ))}

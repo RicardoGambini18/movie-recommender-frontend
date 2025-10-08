@@ -5,6 +5,17 @@
 import './src/env.js'
 
 /** @type {import("next").NextConfig} */
-const config = {}
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        port: '',
+        protocol: 'https',
+        pathname: '/t/p/**',
+        hostname: 'image.tmdb.org',
+      },
+    ],
+  },
+}
 
 export default config

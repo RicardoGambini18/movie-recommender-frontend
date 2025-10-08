@@ -2,6 +2,7 @@
 
 import { ArrowRight, CheckSquare, Info, Square } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { AlgorithmCheckbox } from '~/components/algorithm-checkbox'
 import { DataStructureSection } from '~/components/data-structure-section'
 import { EmptyState } from '~/components/empty-state'
@@ -12,41 +13,42 @@ import { Button } from '~/components/ui/button'
 import { useAppStore } from '~/lib/app-store'
 import { api } from '~/trpc/react'
 
-export default function SortAlgorithmsSelect() {
+export default function SearchAlgorithmsSelectAlgorithms() {
   const router = useRouter()
 
   const {
-    isAllSelected,
-    toggleSelectAll,
     toggleAlgorithm,
-    getSelectedCount,
+    selectedMovieIds,
     isAlgorithmSelected,
-  } = useAppStore((state) => state.sortAlgorithms)
+    isAllAlgorithmsSelected,
+    toggleSelectAllAlgorithms,
+    getSelectedAlgorithmsCount,
+  } = useAppStore((state) => state.searchAlgorithms)
 
   const {
     error,
     refetch,
     isLoading,
     data: dataStructures,
-  } = api.movies.getSortDataStructures.useQuery()
+  } = api.movies.getSearchDataStructures.useQuery()
 
   const handleContinue = () => {
-    router.push('/dashboard/sort-algorithms/results')
+    router.push(`/dashboard/search-algorithms/results`)
   }
 
   const buttons = dataStructures && (
     <>
       <Button
         variant="outline"
-        onClick={() => toggleSelectAll(dataStructures)}
+        onClick={() => toggleSelectAllAlgorithms(dataStructures)}
         className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white bg-transparent"
       >
-        {isAllSelected(dataStructures) ? (
+        {isAllAlgorithmsSelected(dataStructures) ? (
           <CheckSquare className="w-4 h-4" />
         ) : (
           <Square className="w-4 h-4" />
         )}
-        {isAllSelected(dataStructures) ? (
+        {isAllAlgorithmsSelected(dataStructures) ? (
           <span className="hidden md:inline">Deseleccionar todos</span>
         ) : (
           <span className="hidden md:inline">Seleccionar todos</span>
@@ -54,23 +56,29 @@ export default function SortAlgorithmsSelect() {
       </Button>
       <Button
         onClick={handleContinue}
-        disabled={getSelectedCount() === 0}
+        disabled={getSelectedAlgorithmsCount() === 0}
         title="Continuar con los algoritmos seleccionados"
         className="bg-yellow-400 hover:bg-yellow-500 gap-1 text-black font-semibold"
       >
         <span className="hidden md:inline">Continuar</span>
-        <span>({getSelectedCount()})</span>
+        <span>({getSelectedAlgorithmsCount()})</span>
         <ArrowRight className="w-4 h-4 block md:hidden" />
       </Button>
     </>
   )
 
+  useEffect(() => {
+    if (selectedMovieIds.length === 0) {
+      router.push('/dashboard/search-algorithms/select-movies')
+    }
+  }, [selectedMovieIds, router])
+
   if (isLoading) {
     return (
       <HeaderLayout
-        backUrl="/dashboard"
-        title="Algoritmos de Ordenamiento"
-        subtitle="Paso 1: Selección de algoritmos"
+        title="Algoritmos de Búsqueda"
+        subtitle="Paso 2: Selección de algoritmos"
+        backUrl="/dashboard/search-algorithms/select-movies"
       >
         <LoadingState
           title="Cargando algoritmos"
@@ -83,9 +91,9 @@ export default function SortAlgorithmsSelect() {
   if (error) {
     return (
       <HeaderLayout
-        backUrl="/dashboard"
-        title="Algoritmos de Ordenamiento"
-        subtitle="Paso 1: Selección de algoritmos"
+        title="Algoritmos de Búsqueda"
+        subtitle="Paso 2: Selección de algoritmos"
+        backUrl="/dashboard/search-algorithms/select-movies"
       >
         <ErrorState
           onRetry={() => refetch()}
@@ -99,9 +107,9 @@ export default function SortAlgorithmsSelect() {
   if (!dataStructures || dataStructures.length === 0) {
     return (
       <HeaderLayout
-        backUrl="/dashboard"
-        title="Algoritmos de Ordenamiento"
-        subtitle="Paso 1: Selección de algoritmos"
+        title="Algoritmos de Búsqueda"
+        subtitle="Paso 2: Selección de algoritmos"
+        backUrl="/dashboard/search-algorithms/select-movies"
       >
         <EmptyState
           onRetry={() => refetch()}
@@ -114,10 +122,10 @@ export default function SortAlgorithmsSelect() {
 
   return (
     <HeaderLayout
-      backUrl="/dashboard"
       rightElement={buttons}
-      title="Algoritmos de Ordenamiento"
-      subtitle="Paso 1: Selección de algoritmos"
+      title="Algoritmos de Búsqueda"
+      subtitle="Paso 2: Selección de algoritmos"
+      backUrl="/dashboard/search-algorithms/select-movies"
     >
       <div className="mb-8">
         <h2 className="text-xl md:text-2xl font-bold text-white mb-2">

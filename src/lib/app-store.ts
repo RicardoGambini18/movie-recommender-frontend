@@ -24,6 +24,22 @@ interface AppStore {
     toggleSelectAll: (dataStructures: DataStructure[]) => void
     toggleAlgorithm: (algorithmOption: AlgorithmOption) => void
   }
+  searchAlgorithms: {
+    selectedMovieIds: number[]
+    getSelectedMoviesCount: () => number
+    toggleMovie: (movieId: number) => void
+    isMovieSelected: (movieId: number) => boolean
+    selectedAlgorithms: AlgorithmOption[]
+    getSelectedAlgorithmsCount: () => number
+    createCompositeAlgorithmKey: (selectedAlgorithm: AlgorithmOption) => string
+    getSelectedAlgorithmKeys: () => string[]
+    isAlgorithmSelected: (algorithmOption: AlgorithmOption) => boolean
+    getAllAlgorithms: (dataStructures: DataStructure[]) => AlgorithmOption[]
+    getAllAlgorithmKeys: (dataStructures: DataStructure[]) => string[]
+    isAllAlgorithmsSelected: (dataStructures: DataStructure[]) => boolean
+    toggleSelectAllAlgorithms: (dataStructures: DataStructure[]) => void
+    toggleAlgorithm: (algorithmOption: AlgorithmOption) => void
+  }
 }
 
 export const appStore = create<AppStore>()(
@@ -127,6 +143,137 @@ export const appStore = create<AppStore>()(
             set({
               sortAlgorithms: {
                 ...get().sortAlgorithms,
+                selectedAlgorithms: [...selectedAlgorithms, algorithmOption],
+              },
+            })
+          }
+        },
+      },
+      searchAlgorithms: {
+        selectedMovieIds: [],
+        getSelectedMoviesCount: () => {
+          return get().searchAlgorithms.selectedMovieIds.length
+        },
+        isMovieSelected: (movieId: number) => {
+          return get().searchAlgorithms.selectedMovieIds.includes(movieId)
+        },
+        toggleMovie: (movieId: number) => {
+          const { selectedMovieIds, isMovieSelected } = get().searchAlgorithms
+
+          if (isMovieSelected(movieId)) {
+            set({
+              searchAlgorithms: {
+                ...get().searchAlgorithms,
+                selectedMovieIds: selectedMovieIds.filter(
+                  (id) => id !== movieId
+                ),
+              },
+            })
+          } else {
+            set({
+              searchAlgorithms: {
+                ...get().searchAlgorithms,
+                selectedMovieIds: [...selectedMovieIds, movieId],
+              },
+            })
+          }
+        },
+        selectedAlgorithms: [],
+        getSelectedAlgorithmsCount: () => {
+          return get().searchAlgorithms.selectedAlgorithms.length
+        },
+        createCompositeAlgorithmKey: (selectedAlgorithm: AlgorithmOption) => {
+          const { algorithmKey, dataStructureKey } = selectedAlgorithm
+          return `${dataStructureKey}:${algorithmKey}`
+        },
+        getSelectedAlgorithmKeys: () => {
+          return get().searchAlgorithms.selectedAlgorithms.map((alg) =>
+            get().searchAlgorithms.createCompositeAlgorithmKey(alg)
+          )
+        },
+        isAlgorithmSelected: (algorithmOption: AlgorithmOption) => {
+          const { createCompositeAlgorithmKey, getSelectedAlgorithmKeys } =
+            get().searchAlgorithms
+
+          const selectedAlgorithmKeys = getSelectedAlgorithmKeys()
+          return selectedAlgorithmKeys.includes(
+            createCompositeAlgorithmKey(algorithmOption)
+          )
+        },
+        getAllAlgorithms: (dataStructures: DataStructure[]) => {
+          return dataStructures.flatMap((ds) =>
+            ds.algorithms.map((alg) => ({
+              algorithmKey: alg.key,
+              dataStructureKey: ds.key,
+            }))
+          )
+        },
+        getAllAlgorithmKeys: (dataStructures: DataStructure[]) => {
+          const { getAllAlgorithms } = get().searchAlgorithms
+          const allAlgorithms = getAllAlgorithms(dataStructures)
+
+          return allAlgorithms.map((alg) =>
+            get().searchAlgorithms.createCompositeAlgorithmKey(alg)
+          )
+        },
+        isAllAlgorithmsSelected: (dataStructures: DataStructure[]) => {
+          const { getAllAlgorithmKeys, getSelectedAlgorithmKeys } =
+            get().searchAlgorithms
+
+          const selectedAlgorithmKeys = getSelectedAlgorithmKeys()
+          const allAlgorithmKeys = getAllAlgorithmKeys(dataStructures)
+
+          return (
+            allAlgorithmKeys.length > 0 &&
+            allAlgorithmKeys.every((algorithmKey) =>
+              selectedAlgorithmKeys.includes(algorithmKey)
+            )
+          )
+        },
+        toggleSelectAllAlgorithms: (dataStructures: DataStructure[]) => {
+          const { isAllAlgorithmsSelected, getAllAlgorithms } =
+            get().searchAlgorithms
+
+          if (isAllAlgorithmsSelected(dataStructures)) {
+            set({
+              searchAlgorithms: {
+                ...get().searchAlgorithms,
+                selectedAlgorithms: [],
+              },
+            })
+          } else {
+            const allAlgorithms = getAllAlgorithms(dataStructures)
+
+            set({
+              searchAlgorithms: {
+                ...get().searchAlgorithms,
+                selectedAlgorithms: allAlgorithms,
+              },
+            })
+          }
+        },
+        toggleAlgorithm: (algorithmOption: AlgorithmOption) => {
+          const {
+            selectedAlgorithms,
+            createCompositeAlgorithmKey,
+            isAlgorithmSelected,
+          } = get().searchAlgorithms
+
+          if (isAlgorithmSelected(algorithmOption)) {
+            set({
+              searchAlgorithms: {
+                ...get().searchAlgorithms,
+                selectedAlgorithms: selectedAlgorithms.filter(
+                  (alg) =>
+                    createCompositeAlgorithmKey(alg) !==
+                    createCompositeAlgorithmKey(algorithmOption)
+                ),
+              },
+            })
+          } else {
+            set({
+              searchAlgorithms: {
+                ...get().searchAlgorithms,
                 selectedAlgorithms: [...selectedAlgorithms, algorithmOption],
               },
             })

@@ -1,4 +1,10 @@
 import { Award, Medal, Trophy } from 'lucide-react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '~/components/ui/accordion'
 import { Badge } from '~/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { formatNumber } from '~/lib/format'
@@ -39,71 +45,149 @@ export const ResultCard = ({
   result,
   className = '',
   selectedMetric,
-}: ResultCardProps) => (
-  <Card
-    className={`glass border-2 transition-all ${getRankColor(index)} ${className}`}
-  >
-    <CardHeader>
-      <div className="flex items-start justify-between">
-        <div className="flex items-start gap-3">
-          <div className="mt-1">{getRankIcon(index)}</div>
-          <div>
-            <CardTitle className="text-white mb-1">
-              {result.algorithm}
-            </CardTitle>
-            <p className="text-sm text-slate-400">{result.data_structure}</p>
+}: ResultCardProps) => {
+  const hasSubMetrics = !!result.sub_metrics
+
+  return (
+    <Card
+      className={`glass border-2 transition-all ${getRankColor(index)} ${className}`}
+    >
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-3">
+            <div className="mt-1">{getRankIcon(index)}</div>
+            <div>
+              <CardTitle className="text-white mb-1">
+                {result.algorithm}
+              </CardTitle>
+              <p className="text-sm text-slate-400">{result.data_structure}</p>
+            </div>
+          </div>
+          <Badge variant="outline" className="border-slate-600 text-slate-300">
+            Posición #{index + 1}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="glass-light bg-slate-900/30 p-4 rounded-lg flex flex-col justify-between">
+            <p className="text-xs text-slate-400 mb-1">Elementos procesados</p>
+            <p className="text-xl font-bold text-white">
+              {formatNumber(result.item_count)}
+            </p>
+          </div>
+          <div className="glass-light bg-slate-900/30 p-4 rounded-lg flex flex-col justify-between">
+            <p className="text-xs text-slate-400 mb-1">
+              {getMetricLabel(Metric.COMPARISONS, hasSubMetrics)}
+            </p>
+            <p className="text-xl font-bold text-white">
+              {getMetricValue(
+                Metric.COMPARISONS,
+                Math.round(result.metrics.comparisons)
+              )}
+            </p>
+          </div>
+          <div className="glass-light bg-slate-900/30 p-4 rounded-lg flex flex-col justify-between">
+            <p className="text-xs text-slate-400 mb-1">
+              {getMetricLabel(Metric.MEMORY, hasSubMetrics)}
+            </p>
+            <p className="text-xl font-bold text-white">
+              {getMetricValue(Metric.MEMORY, result.metrics.memory)}
+            </p>
+          </div>
+          <div className="glass-light bg-slate-900/30 p-4 rounded-lg flex flex-col justify-between">
+            <p className="text-xs text-slate-400 mb-1">
+              {getMetricLabel(Metric.TIME, hasSubMetrics)}
+            </p>
+            <p className="text-xl font-bold text-white">
+              {getMetricValue(Metric.TIME, result.metrics.time)}
+            </p>
           </div>
         </div>
-        <Badge variant="outline" className="border-slate-600 text-slate-300">
-          Posición #{index + 1}
-        </Badge>
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="glass-light bg-slate-900/30 p-4 rounded-lg">
-          <p className="text-xs text-slate-400 mb-1">Elementos procesados</p>
-          <p className="text-xl font-bold text-white">
-            {formatNumber(result.item_count)}
-          </p>
+        <div
+          className={`mt-4 p-4 glass-light border rounded-lg ${getMetricHighlightColor(index)}`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold">
+              {getMetricLabel(selectedMetric, hasSubMetrics)}
+            </span>
+            <span className="text-2xl font-bold">
+              {getMetricValue(selectedMetric, result.metrics[selectedMetric])}
+            </span>
+          </div>
         </div>
-        <div className="glass-light bg-slate-900/30 p-4 rounded-lg">
-          <p className="text-xs text-slate-400 mb-1">
-            {getMetricLabel(Metric.COMPARISONS)}
-          </p>
-          <p className="text-xl font-bold text-white">
-            {getMetricValue(Metric.COMPARISONS, result.metrics.comparisons)}
-          </p>
-        </div>
-        <div className="glass-light bg-slate-900/30 p-4 rounded-lg">
-          <p className="text-xs text-slate-400 mb-1">
-            {getMetricLabel(Metric.MEMORY)}
-          </p>
-          <p className="text-xl font-bold text-white">
-            {getMetricValue(Metric.MEMORY, result.metrics.memory)}
-          </p>
-        </div>
-        <div className="glass-light bg-slate-900/30 p-4 rounded-lg">
-          <p className="text-xs text-slate-400 mb-1">
-            {getMetricLabel(Metric.TIME)}
-          </p>
-          <p className="text-xl font-bold text-white">
-            {getMetricValue(Metric.TIME, result.metrics.time)}
-          </p>
-        </div>
-      </div>
-      <div
-        className={`mt-4 p-4 glass-light border rounded-lg ${getMetricHighlightColor(index)}`}
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold">
-            {getMetricLabel(selectedMetric)}
-          </span>
-          <span className="text-2xl font-bold">
-            {getMetricValue(selectedMetric, result.metrics[selectedMetric])}
-          </span>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-)
+        {hasSubMetrics && (
+          <Accordion type="single" collapsible className="mt-4">
+            <AccordionItem
+              value="individual-results"
+              className="border-slate-700/50"
+            >
+              <AccordionTrigger className="text-slate-300 hover:text-white hover:bg-slate-800/30 rounded-lg px-3 py-2 transition-all duration-200 cursor-pointer hover:no-underline">
+                <span className="flex items-center gap-2">
+                  <span className="text-sm font-medium">
+                    Resultados Individuales
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className="border-slate-600 text-slate-400 text-xs"
+                  >
+                    {result.sub_metrics?.length ?? 0}
+                  </Badge>
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2 pt-2">
+                  {result.sub_metrics?.map((individualResult, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-3"
+                    >
+                      <div className="text-sm font-medium text-slate-300 mb-2">
+                        Búsqueda #{idx + 1}{' '}
+                        {typeof individualResult.item_found_index === 'number'
+                          ? `(Elemento #${individualResult.item_found_index + 1})`
+                          : '(Elemento no encontrado)'}
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                        <div>
+                          <span className="text-slate-500">
+                            {getMetricLabel(Metric.COMPARISONS)}:
+                          </span>
+                          <span className="text-slate-300 ml-1">
+                            {getMetricValue(
+                              Metric.COMPARISONS,
+                              Math.round(individualResult.comparisons)
+                            )}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500">
+                            {getMetricLabel(Metric.MEMORY)}:
+                          </span>
+                          <span className="text-slate-300 ml-1">
+                            {getMetricValue(
+                              Metric.MEMORY,
+                              individualResult.memory
+                            )}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500">
+                            {getMetricLabel(Metric.TIME)}:
+                          </span>
+                          <span className="text-slate-300 ml-1">
+                            {getMetricValue(Metric.TIME, individualResult.time)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
+      </CardContent>
+    </Card>
+  )
+}

@@ -25,16 +25,16 @@ export function AlgorithmCheckbox({
 }: Readonly<AlgorithmCheckboxProps>) {
   return (
     <div
+      tabIndex={0}
+      role="button"
       onClick={() => onToggle(algorithm.key)}
+      className="border border-slate-700/50 rounded-lg p-4 glass-light bg-slate-900/20 cursor-pointer hover:bg-slate-800/40 transition-colors"
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
           onToggle(algorithm.key)
         }
       }}
-      role="button"
-      tabIndex={0}
-      className="border border-slate-700/50 rounded-lg p-4 glass-light bg-slate-900/20 cursor-pointer hover:bg-slate-800/40 transition-colors"
     >
       <div className="flex items-start gap-3 mb-4">
         <Checkbox
@@ -44,7 +44,17 @@ export function AlgorithmCheckbox({
           className="border-slate-600 data-[state=checked]:bg-yellow-400 data-[state=checked]:border-yellow-400 data-[state=checked]:text-black mt-1"
         />
         <div className="flex-1">
-          <h3 className="text-white font-semibold mb-2">{algorithm.name}</h3>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+            <h3 className="text-white font-semibold">{algorithm.name}</h3>
+            {algorithm.needs_sort && (
+              <Badge
+                variant="outline"
+                className="border-yellow-400/50 text-yellow-400 bg-yellow-400/10 self-start sm:self-auto"
+              >
+                Requiere ordenamiento
+              </Badge>
+            )}
+          </div>
           <p className="text-slate-300 text-sm leading-relaxed mb-4">
             {algorithm.description}
           </p>

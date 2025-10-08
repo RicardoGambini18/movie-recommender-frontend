@@ -14,11 +14,15 @@ interface MetricSelectProps {
   onValueChange: (value: Metric) => void
 }
 
-export const getMetricLabel = (metric: Metric) => {
+export const getMetricLabel = (metric: Metric, isAverage = false) => {
   const labels = {
-    [Metric.MEMORY]: 'Uso de memoria',
-    [Metric.TIME]: 'Tiempo de ejecución',
-    [Metric.COMPARISONS]: 'Número de comparaciones',
+    [Metric.MEMORY]: isAverage ? 'Uso de memoria promedio' : 'Uso de memoria',
+    [Metric.TIME]: isAverage
+      ? 'Tiempo de ejecución promedio'
+      : 'Tiempo de ejecución',
+    [Metric.COMPARISONS]: isAverage
+      ? 'Número de comparaciones promedio'
+      : 'Número de comparaciones',
   }
   return labels[metric]
 }
