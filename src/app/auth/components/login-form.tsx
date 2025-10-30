@@ -1,7 +1,14 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Check, Eye, EyeOff, Lock, User as UserIcon } from 'lucide-react'
+import {
+  Check,
+  Eye,
+  EyeOff,
+  HelpCircle,
+  Lock,
+  User as UserIcon,
+} from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -159,6 +166,13 @@ export const LoginForm = () => {
           <Label htmlFor="password" className="text-slate-200 font-medium">
             Contraseña
           </Label>
+          <div className="flex items-center gap-1.5">
+            <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
+            <p className="text-xs text-slate-400">
+              La contraseña es el número de sección:{' '}
+              <span className="font-semibold text-slate-300">33396</span>
+            </p>
+          </div>
           <Controller
             name="password"
             control={control}
