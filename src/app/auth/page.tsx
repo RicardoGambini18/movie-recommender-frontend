@@ -1,3 +1,5 @@
+import { Logo } from '~/components/logo'
+
 import { LoginForm } from './components/login-form'
 
 export default function Home() {
@@ -10,14 +12,12 @@ export default function Home() {
       </div>
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-400 rounded-lg mb-4">
-            <span className="text-black font-bold text-xl">IMDb</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
+            <Logo className="w-16 h-16" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">
-            Recomendador de Películas
-          </h1>
+          <h1 className="text-2xl font-bold text-white mb-2">Algolab</h1>
           <p className="text-slate-400">
-            Bienvenido de vuelta, inicia sesión para continuar
+            Laboratorio interactivo de algoritmos y estructuras de datos
           </p>
         </div>
         <LoginForm />

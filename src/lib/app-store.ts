@@ -282,7 +282,7 @@ export const appStore = create<AppStore>()(
       },
     }),
     {
-      name: 'movie-recommender-app-store',
+      name: 'algolab-app-store',
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: (state) => () =>
         state.isHydrated ? null : state.setIsHydrated(true),

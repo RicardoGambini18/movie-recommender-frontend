@@ -6,8 +6,9 @@ import '~/styles/globals.css'
 import { TRPCReactProvider } from '~/trpc/react'
 
 export const metadata: Metadata = {
-  title: 'Recomendador de películas',
-  description: 'Proyecto final del curso Algoritmos y Estructuras de Datos',
+  title: 'Algolab',
+  description:
+    'Algolab es un laboratorio interactivo de algoritmos y estructuras de datos que permite experimentar con distintas implementaciones, comparar su rendimiento y visualizar su comportamiento en tiempo real, incluyendo comparadores de algoritmos de búsqueda y ordenamiento.',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
 

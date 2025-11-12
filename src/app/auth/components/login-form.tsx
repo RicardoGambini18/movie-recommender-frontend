@@ -166,13 +166,14 @@ export const LoginForm = () => {
           <Label htmlFor="password" className="text-slate-200 font-medium">
             Contraseña
           </Label>
-          <div className="flex items-center gap-1.5">
-            <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
-            <p className="text-xs text-slate-400">
-              La contraseña es el número de sección:{' '}
-              <span className="font-semibold text-slate-300">33396</span>
-            </p>
-          </div>
+          {!!env.NEXT_PUBLIC_PASSWORD_HINT && (
+            <div className="flex items-center gap-1.5">
+              <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
+              <p className="text-xs text-slate-400">
+                {env.NEXT_PUBLIC_PASSWORD_HINT}
+              </p>
+            </div>
+          )}
           <Controller
             name="password"
             control={control}
@@ -224,11 +225,13 @@ export const LoginForm = () => {
           )}
         </Button>
       </form>
-      <div className="mt-6 text-center">
-        <p className="text-slate-400 text-sm">
-          Proyecto final del curso {env.NEXT_PUBLIC_COURSE}
-        </p>
-      </div>
+      {!!env.NEXT_PUBLIC_COURSE && (
+        <div className="mt-6 text-center">
+          <p className="text-slate-400 text-sm">
+            Proyecto final del curso {env.NEXT_PUBLIC_COURSE}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

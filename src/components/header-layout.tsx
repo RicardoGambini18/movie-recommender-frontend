@@ -1,6 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { type ReactNode } from 'react'
+import { Logo } from '~/components/logo'
 import { Button } from '~/components/ui/button'
 
 interface HeaderLayoutProps {
@@ -16,7 +17,7 @@ export function HeaderLayout({
   children,
   subtitle,
   rightElement,
-  title = 'Recomendador de Películas',
+  title = 'Algolab',
 }: Readonly<HeaderLayoutProps>) {
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
@@ -38,8 +39,8 @@ export function HeaderLayout({
                 </Button>
               </Link>
             )}
-            <div className="hidden md:flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-lg flex-shrink-0">
-              <span className="text-black font-bold text-sm">IMDb</span>
+            <div className="hidden md:flex items-center justify-center w-10 h-10 flex-shrink-0">
+              <Logo className="w-10 h-10" />
             </div>
             <div className="min-w-0 flex-1">
               <h1 className="text-lg md:text-xl font-bold text-white truncate">
