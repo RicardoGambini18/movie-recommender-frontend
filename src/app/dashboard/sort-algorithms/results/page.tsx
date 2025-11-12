@@ -52,7 +52,7 @@ export default function SortAlgorithmsResults() {
       >
         <LoadingState
           title="Procesando algoritmos"
-          description="Los algoritmos están siendo ejecutados y comparados. Esto puede tomar hasta un minuto dependiendo de la complejidad."
+          description="Los algoritmos están siendo ejecutados y comparados. Esto puede tomar unos minutos dependiendo de la complejidad."
         />
       </HeaderLayout>
     )
