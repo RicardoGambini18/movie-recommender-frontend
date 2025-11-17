@@ -1,8 +1,12 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, CheckSquare, Info, Square } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { toast } from 'sonner'
+
+import { getSearchDataStructures } from '~/api/movies'
 import { AlgorithmCheckbox } from '~/components/algorithm-checkbox'
 import { DataStructureSection } from '~/components/data-structure-section'
 import { EmptyState } from '~/components/empty-state'
@@ -11,7 +15,6 @@ import { HeaderLayout } from '~/components/header-layout'
 import { LoadingState } from '~/components/loading-state'
 import { Button } from '~/components/ui/button'
 import { useAppStore } from '~/lib/app-store'
-import { api } from '~/trpc/react'
 
 export default function SearchAlgorithmsSelectAlgorithms() {
   const router = useRouter()
@@ -30,7 +33,18 @@ export default function SearchAlgorithmsSelectAlgorithms() {
     refetch,
     isLoading,
     data: dataStructures,
-  } = api.movies.getSearchDataStructures.useQuery()
+  } = useQuery({
+    queryKey: ['get-search-data-structures'],
+    queryFn: async () => {
+      try {
+        return await getSearchDataStructures()
+      } catch (error) {
+        console.error('Error al obtener estructuras de datos:', error)
+        toast.error('Error al obtener estructuras de datos')
+        throw error
+      }
+    },
+  })
 
   const handleContinue = () => {
     router.push(`/dashboard/search-algorithms/results`)

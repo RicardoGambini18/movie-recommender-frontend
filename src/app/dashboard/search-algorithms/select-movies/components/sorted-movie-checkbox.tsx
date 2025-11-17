@@ -1,6 +1,6 @@
 import { Image as ImageIcon, Star } from 'lucide-react'
-import Image from 'next/image'
 import { useState } from 'react'
+
 import { Checkbox } from '~/components/ui/checkbox'
 import { formatDate } from '~/lib/format'
 import { type Movie } from '~/types/movie'
@@ -48,11 +48,11 @@ export function SortedMovieCheckbox({
             <ImageIcon className="text-slate-400 w-8 h-8" />
           </div>
         ) : (
-          <Image
-            fill
-            className="object-cover"
+          <img
+            loading="lazy"
             alt={movie.title_es ?? movie.title}
             onError={() => setShowImagePlaceholder(true)}
+            className="absolute inset-0 h-full w-full object-cover"
             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
           />
         )}

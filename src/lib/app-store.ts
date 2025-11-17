@@ -2,6 +2,7 @@ import { mergeDeepLeft } from 'ramda'
 import { create, useStore } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { useShallow } from 'zustand/shallow'
+
 import { type DataStructure } from '~/types/data-structure'
 
 interface AlgorithmOption {
@@ -12,6 +13,10 @@ interface AlgorithmOption {
 interface AppStore {
   isHydrated: boolean
   setIsHydrated: (isHydrated: boolean) => void
+  auth: {
+    token: string | null
+    setToken: (token: string | null) => void
+  }
   sortAlgorithms: {
     selectedAlgorithms: AlgorithmOption[]
     getSelectedCount: () => number
@@ -47,6 +52,11 @@ export const appStore = create<AppStore>()(
     (set, get) => ({
       isHydrated: false,
       setIsHydrated: (isHydrated: boolean) => set({ isHydrated }),
+      auth: {
+        token: null,
+        setToken: (token: string | null) =>
+          set({ auth: { ...get().auth, token } }),
+      },
       sortAlgorithms: {
         selectedAlgorithms: [],
         getSelectedCount: () => {
@@ -285,7 +295,7 @@ export const appStore = create<AppStore>()(
       name: 'algolab-app-store',
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: (state) => () =>
-        state.isHydrated ? null : state.setIsHydrated(true),
+        state.isHydrated ? undefined : state.setIsHydrated(true),
       merge: (persistedState, currentState) =>
         mergeDeepLeft(persistedState as AppStore, currentState),
     }

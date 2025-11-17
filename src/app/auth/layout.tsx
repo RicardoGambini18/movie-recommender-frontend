@@ -1,14 +1,17 @@
-import { redirect } from 'next/navigation'
-import { auth } from '~/server/auth'
+'use client'
 
-export default async function AuthLayout({
+import { redirect } from 'next/navigation'
+
+import { useAppStore } from '~/lib/app-store'
+
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await auth()
+  const isAuthenticated = useAppStore((store) => !!store.auth.token)
 
-  if (session) redirect('/dashboard')
+  if (isAuthenticated) redirect('/dashboard')
 
-  return children
+  return <>{children}</>
 }

@@ -1,4 +1,5 @@
 import { BarChart3, Search } from 'lucide-react'
+
 import { HeaderLayout } from '~/components/header-layout'
 import { LogoutButton } from '~/components/logout-button'
 

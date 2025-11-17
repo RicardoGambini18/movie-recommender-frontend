@@ -33,7 +33,7 @@ export const formatTime = (nanoseconds: number) => {
     { value: MIN, unit: 'min' },
   ]
 
-  let bestUnit = units[0]!
+  let bestUnit = units[0]
 
   for (const unit of units) {
     if (nanoseconds >= unit.value) {
@@ -63,7 +63,7 @@ export const formatMemory = (bytes: number) => {
     { value: TB, unit: 'TB' },
   ]
 
-  let bestUnit = units[0]!
+  let bestUnit = units[0]
 
   for (const unit of units) {
     if (bytes >= unit.value) {

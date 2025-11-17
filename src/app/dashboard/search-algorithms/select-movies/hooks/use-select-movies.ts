@@ -1,7 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useRef, useState } from 'react'
+import { toast } from 'sonner'
+
+import { getMovies } from '~/api/movies'
 import { useAppStore } from '~/lib/app-store'
-import { api } from '~/trpc/react'
 
 const ITEM_GAP = 8
 const ITEM_HEIGHT = 170
@@ -20,7 +23,18 @@ export const useSelectMovies = () => {
     refetch,
     isLoading,
     data: movies,
-  } = api.movies.getMovies.useQuery()
+  } = useQuery({
+    queryKey: ['get-movies'],
+    queryFn: async () => {
+      try {
+        return await getMovies()
+      } catch (error) {
+        console.error('Error al obtener películas:', error)
+        toast.error('Error al obtener películas')
+        throw error
+      }
+    },
+  })
 
   const virtualizer = useVirtualizer({
     count: movies?.length ?? 0,

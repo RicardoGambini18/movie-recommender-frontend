@@ -1,7 +1,11 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, CheckSquare, Info, Square } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+
+import { getSortDataStructures } from '~/api/movies'
 import { AlgorithmCheckbox } from '~/components/algorithm-checkbox'
 import { DataStructureSection } from '~/components/data-structure-section'
 import { EmptyState } from '~/components/empty-state'
@@ -10,7 +14,6 @@ import { HeaderLayout } from '~/components/header-layout'
 import { LoadingState } from '~/components/loading-state'
 import { Button } from '~/components/ui/button'
 import { useAppStore } from '~/lib/app-store'
-import { api } from '~/trpc/react'
 
 export default function SortAlgorithmsSelect() {
   const router = useRouter()
@@ -28,7 +31,18 @@ export default function SortAlgorithmsSelect() {
     refetch,
     isLoading,
     data: dataStructures,
-  } = api.movies.getSortDataStructures.useQuery()
+  } = useQuery({
+    queryKey: ['get-sort-data-structures'],
+    queryFn: async () => {
+      try {
+        return await getSortDataStructures()
+      } catch (error) {
+        console.error('Error al obtener estructuras de datos:', error)
+        toast.error('Error al obtener estructuras de datos')
+        throw error
+      }
+    },
+  })
 
   const handleContinue = () => {
     router.push('/dashboard/sort-algorithms/results')

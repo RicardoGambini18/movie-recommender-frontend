@@ -1,11 +1,12 @@
 'use client'
 
 import { LogOut } from 'lucide-react'
-import { signOut } from 'next-auth/react'
-import { Button } from '~/components/ui/button'
 
-const handleLogout = async () => {
-  await signOut({ callbackUrl: '/auth' })
+import { Button } from '~/components/ui/button'
+import { appStore } from '~/lib/app-store'
+
+const handleLogout = () => {
+  appStore.getState().auth.setToken(null)
 }
 
 export function LogoutButton() {

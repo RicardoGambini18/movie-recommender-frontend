@@ -1,14 +1,17 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
+
+import { getSortResults } from '~/api/movies'
 import { ErrorState } from '~/components/error-state'
 import { HeaderLayout } from '~/components/header-layout'
 import { LoadingState } from '~/components/loading-state'
 import { MetricSelect } from '~/components/metric-select'
 import { ResultCard } from '~/components/result-card'
 import { useAppStore } from '~/lib/app-store'
-import { api } from '~/trpc/react'
 import { Metric } from '~/types/algorithm-result'
 
 export default function SortAlgorithmsResults() {
@@ -24,10 +27,19 @@ export default function SortAlgorithmsResults() {
     refetch,
     isLoading,
     data: results,
-  } = api.movies.getSortResults.useQuery(
-    { algorithms: selectedAlgorithms },
-    { enabled: selectedAlgorithms.length > 0 }
-  )
+  } = useQuery({
+    queryKey: ['get-sort-results'],
+    enabled: selectedAlgorithms.length > 0,
+    queryFn: async () => {
+      try {
+        return await getSortResults({ algorithms: selectedAlgorithms })
+      } catch (error) {
+        console.error('Error al obtener resultados:', error)
+        toast.error('Error al obtener resultados')
+        throw error
+      }
+    },
+  })
 
   const sortedResults = useMemo(() => {
     if (!results) return []

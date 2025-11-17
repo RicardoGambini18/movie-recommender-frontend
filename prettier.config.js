@@ -14,7 +14,7 @@ const config = {
   proseWrap: 'never',
   endOfLine: 'auto',
   embeddedLanguageFormatting: 'auto',
-  importOrder: ['<THIRD_PARTY_MODULES>', '^@/(.*)$', '^[./]'],
+  importOrder: ['<THIRD_PARTY_MODULES>', '^~/(.*)$', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
   plugins: [

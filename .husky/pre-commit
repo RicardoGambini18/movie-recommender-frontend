@@ -1,1 +1,1 @@
-concurrently "pnpm lint" "pnpm format:check" "pnpm typecheck"
+pnpm concurrently "tsc --noEmit" "eslint ." "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
