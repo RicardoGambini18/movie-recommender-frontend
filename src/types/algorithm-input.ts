@@ -4,10 +4,12 @@ export type AlgorithmInput = {
 }
 
 export type GetSortResultsInput = {
+  includeResult?: boolean
   algorithms: AlgorithmInput[]
 }
 
 export type GetSearchResultsInput = {
   movieIds: number[]
+  includeResult?: boolean
   algorithms: AlgorithmInput[]
 }

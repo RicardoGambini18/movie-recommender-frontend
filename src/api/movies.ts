@@ -15,7 +15,7 @@ export const getSortDataStructures = async () => {
 }
 
 export const getSortResults = async (input: GetSortResultsInput) => {
-  const { algorithms } = input
+  const { algorithms, includeResult } = input
 
   if (algorithms.length === 0) {
     return []
@@ -29,6 +29,7 @@ export const getSortResults = async (input: GetSortResultsInput) => {
       {
         params: {
           algorithm_key: algorithmKey,
+          include_result: includeResult,
           data_structure_key: dataStructureKey,
         },
       }
@@ -53,7 +54,7 @@ export const getSearchDataStructures = async () => {
 }
 
 export const getSearchResults = async (input: GetSearchResultsInput) => {
-  const { movieIds, algorithms } = input
+  const { movieIds, algorithms, includeResult } = input
 
   if (movieIds.length === 0 || algorithms.length === 0) {
     return []
@@ -71,6 +72,7 @@ export const getSearchResults = async (input: GetSearchResultsInput) => {
           params: {
             movie_id: movieId,
             algorithm_key: algorithmKey,
+            include_result: includeResult,
             data_structure_key: dataStructureKey,
           },
         }

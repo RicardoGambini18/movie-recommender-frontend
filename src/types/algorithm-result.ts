@@ -18,6 +18,7 @@ export interface AlgorithmResult<T = object> {
   algorithm: string
   sorted_data?: T[]
   item_count: number
+  needs_sort?: boolean
   item_found?: T | null
   data_structure: string
   metrics: AlgorithmMetric
