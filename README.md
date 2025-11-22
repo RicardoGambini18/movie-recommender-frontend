@@ -19,10 +19,9 @@ Algolab Web Client es una interfaz de usuario moderna y reutilizable construida 
 
 ## 🚀 Instalación y Configuración
 
-### 1. Clonar el Repositorio
-
+### 1. Navegar al Proyecto
+Clonar el repositorio o descargarlo y luego ingresar a la carpeta:
 ```bash
-git clone https://github.com/RicardoGambini18/algolab-web-client.git
 cd algolab-web-client
 ```
 
