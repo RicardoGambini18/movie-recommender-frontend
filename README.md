@@ -1,6 +1,6 @@
-# Algolab - Frontend
+# Algolab - Web Client
 
-Algolab Frontend es una interfaz de usuario moderna y reutilizable construida con Next.js que permite interactuar con backends que implementen la API de evaluación de algoritmos basada en The Movies Dataset (TMDB). El frontend utiliza **Static Site Generation (SSG)** para generar archivos estáticos que pueden ser servidos desde cualquier servidor web estático.
+Algolab Web Client es una interfaz de usuario moderna y reutilizable construida con Next.js que permite interactuar con backends que implementen la API de evaluación de algoritmos basada en The Movies Dataset (TMDB). El frontend utiliza **Static Site Generation (SSG)** para generar archivos estáticos que pueden ser servidos desde cualquier servidor web estático.
 
 ## 🎯 Características
 
@@ -22,8 +22,8 @@ Algolab Frontend es una interfaz de usuario moderna y reutilizable construida co
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/RicardoGambini18/algolab-frontend.git
-cd algolab-frontend
+git clone https://github.com/RicardoGambini18/algolab-web-client.git
+cd algolab-web-client
 ```
 
 ### 2. Instalar Dependencias
@@ -199,7 +199,7 @@ Para que este frontend funcione correctamente, el backend debe implementar los s
 ## 📁 Estructura del Proyecto
 
 ```
-algolab-frontend/
+algolab-web-client/
 ├── src/
 │   ├── api/              # Clientes de API
 │   ├── app/              # Páginas y layouts (App Router)
